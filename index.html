@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supletivo do Norte · Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-icon">SN</div>
+      <div class="logo-text">
+        <h1>Supletivo do Norte</h1>
+        <span>Dashboard de Matrículas · 2026</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="loading-badge show" id="loadingBadge">⟳ Carregando...</div>
+      <div class="last-update" id="lastUpdate">—</div>
+    </div>
+  </header>
+
+  <!-- ── ERRO ── -->
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- ── HERO KPIs: Provas / Faturamento / Alunos ── -->
+  <div class="hero-kpis">
+
+    <!-- Provas — destaque principal -->
+    <div class="hero-card primary">
+      <span class="hero-icon">📝</span>
+      <div class="hero-label">Provas Vendidas — Última Semana</div>
+      <div class="hero-value" id="heroProvasVal">—</div>
+      <div class="hero-meta">
+        <span class="hero-sub" id="heroProvasPer">—</span>
+        <span id="heroProvasVar"></span>
+      </div>
+      <div class="hero-sub" id="heroProvasSub" style="margin-top:8px">—</div>
+    </div>
+
+    <!-- Faturamento -->
+    <div class="hero-card">
+      <span class="hero-icon">💰</span>
+      <div class="hero-label">Faturamento — Última Semana</div>
+      <div class="hero-value" style="font-size:32px" id="heroFatVal">—</div>
+      <div class="hero-meta">
+        <span class="hero-sub" id="heroFatPer">—</span>
+        <span id="heroFatVar"></span>
+      </div>
+    </div>
+
+    <!-- Alunos -->
+    <div class="hero-card">
+      <span class="hero-icon">🎓</span>
+      <div class="hero-label">Alunos — Última Semana</div>
+      <div class="hero-value" style="font-size:32px" id="heroAlunosVal">—</div>
+      <div class="hero-meta">
+        <span class="hero-sub" id="heroAlunosPer">—</span>
+        <span id="heroAlunosVar"></span>
+      </div>
+      <div class="hero-sub" id="heroAlunosSub" style="margin-top:8px">—</div>
+    </div>
+
+  </div>
+
+  <!-- ── KPIs SECUNDÁRIOS ── -->
+  <div class="secondary-kpis">
+
+    <div class="sec-card">
+      <span class="sec-icon">📊</span>
+      <div class="sec-label">Média Faturamento Semanal</div>
+      <div class="sec-value" id="secFatMedia">—</div>
+    </div>
+
+    <div class="sec-card">
+      <span class="sec-icon">🏆</span>
+      <div class="sec-label">Melhor Semana do Ano</div>
+      <div class="sec-value" id="secFatMelhor">—</div>
+      <div class="sec-sub" id="secFatMelhorPer">—</div>
+    </div>
+
+    <div class="sec-card">
+      <span class="sec-icon">📜</span>
+      <div class="sec-label">Certificados Solicitados</div>
+      <div class="sec-value" id="secCertUlt">—</div>
+      <div class="sec-sub" id="secCertTotal">—</div>
+    </div>
+
+    <div class="sec-card">
+      <span class="sec-icon">📅</span>
+      <div class="sec-label">Semanas Registradas</div>
+      <div class="sec-value" id="secSemanas">—</div>
+      <div class="sec-sub">2026</div>
+    </div>
+
+  </div>
+
+  <!-- ── RESUMO ANUAL ── -->
+  <div class="annual-summary">
+    <div>
+      <div class="annual-title">Resumo Acumulado 2026</div>
+    </div>
+    <div class="annual-stat">
+      <span class="annual-stat-val" id="annualFat">—</span>
+      <span class="annual-stat-lbl">Faturamento total</span>
+    </div>
+    <div class="annual-divider"></div>
+    <div class="annual-stat">
+      <span class="annual-stat-val" id="annualProj">—</span>
+      <span class="annual-stat-lbl">Projeção anual</span>
+    </div>
+    <div class="annual-divider"></div>
+    <div class="annual-stat">
+      <span class="annual-stat-val" id="annualProvas">—</span>
+      <span class="annual-stat-lbl">Provas vendidas</span>
+    </div>
+    <div class="annual-divider"></div>
+    <div class="annual-stat">
+      <span class="annual-stat-val" id="annualAlunos">—</span>
+      <span class="annual-stat-lbl">Alunos matriculados</span>
+    </div>
+    <div class="annual-divider"></div>
+    <div class="annual-stat">
+      <span class="annual-stat-val" id="annualCerts">—</span>
+      <span class="annual-stat-lbl">Certificados solicitados</span>
+    </div>
+  </div>
+
+  <!-- ── GRÁFICO PROVAS + FATURAMENTO ── -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Provas Vendidas por Semana</div>
+      <div class="chart-sub">Barras azul-claro = acima da média · 2026</div>
+      <canvas id="chartProvas" height="220"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Acumulado por Mês</div>
+      <div class="chart-sub">Faturamento mensal 2026</div>
+      <canvas id="chartMensal" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- ── ALUNOS + FATURAMENTO SEMANAL ── -->
+  <div class="charts-row-2">
+    <div class="chart-card">
+      <div class="chart-title">Alunos por Semana</div>
+      <div class="chart-sub">Evolução semanal de matrículas</div>
+      <canvas id="chartAlunos" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Faturamento por Semana</div>
+      <div class="chart-sub">Receita semanal 2026</div>
+      <canvas id="chartFat" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- ── TABELA HISTÓRICA ── -->
+  <div class="table-card">
+    <div class="table-header-area">
+      <div class="chart-title">Histórico Semanal</div>
+      <div class="chart-sub">Todos os registros de 2026 · variação semana a semana</div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Período</th>
+            <th>Provas</th>
+            <th>Var. Provas</th>
+            <th>Alunos</th>
+            <th>Var. Alunos</th>
+            <th>Faturamento</th>
+            <th>Var. Fat.</th>
+            <th>Certificados</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── ALERTA DINÂMICO DE SAZONALIDADE ── -->
+  <div class="alert-sazo" id="alertSazo">
+    <span style="font-size:20px" id="alertSazoIcon"></span>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent2)" id="alertSazoTitulo">—</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px"   id="alertSazoTexto">—</div>
+    </div>
+  </div>
+
+  <!-- ── SAZONALIDADE FIXA ── -->
+  <div class="sazo-grid">
+    <div class="sazo-card">
+      <div class="sazo-icon">⚠️</div>
+      <div class="sazo-content">
+        <h4>Virada de Ano</h4>
+        <p>22/dez a 04/jan: queda para R$ 7.800–8.650/sem. Período de menor faturamento do ano.</p>
+      </div>
+    </div>
+    <div class="sazo-card">
+      <div class="sazo-icon">🎭</div>
+      <div class="sazo-content">
+        <h4>Carnaval</h4>
+        <p>Semana do carnaval cai ~58% (R$ 11.000 em 2026). Semana seguinte recupera forte para R$ 23.000.</p>
+      </div>
+    </div>
+    <div class="sazo-card">
+      <div class="sazo-icon">🚀</div>
+      <div class="sazo-content">
+        <h4>Retomada Pós-Feriado</h4>
+        <p>Maiores saltos ocorrem logo após quedas sazonais. Início de janeiro 2026: +195% em uma semana.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Dashboard Supletivo do Norte · Dados via Supabase · <a href="#">Paleta Marketing</a>
+  </footer>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
