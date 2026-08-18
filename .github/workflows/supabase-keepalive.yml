@@ -1,0 +1,26 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # A cada 3 dias às 12:00 UTC — evita a pausa automática do Supabase
+    # (projetos free pausam após ~7 dias sem requisições)
+    - cron: "0 12 */3 * *"
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}" \
+            "https://ieshyaiudxjrdwllbdai.supabase.co/rest/v1/sn_semanas?select=semana_inicio&limit=1")
+          echo "Supabase respondeu com status $STATUS"
+          if [ "$STATUS" -ge 400 ] && [ "$STATUS" -ne 401 ]; then
+            echo "Status inesperado, verifique o projeto Supabase."
+            exit 1
+          fi
+        env:
+          SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllc2h5YWl1ZHhqcmR3bGxiZGFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNzAwMDcsImV4cCI6MjA5Mjc0NjAwN30.ilWUJDdfrm1R6umsUEu1_Z3iId3ejCNGeeE0sEPs9z8
