@@ -2,9 +2,12 @@ name: Supabase Keep-Alive
 
 on:
   schedule:
-    # A cada 3 dias às 12:00 UTC — evita a pausa automática do Supabase
-    # (projetos free pausam após ~7 dias sem requisições)
-    - cron: "0 12 */3 * *"
+    # Todo dia às 12:00 UTC — evita a pausa automática do Supabase
+    # (projetos free pausam após ~7 dias sem requisições; rodar a cada 3 dias
+    # não foi suficiente e o projeto pausou em 2026-09-07, então reduzimos
+    # o intervalo para diário e adicionamos retry contra falhas de DNS/rede
+    # transitórias do runner)
+    - cron: "0 12 * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -14,6 +17,7 @@ jobs:
       - name: Ping Supabase REST API
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            --retry 3 --retry-delay 5 --retry-all-errors \
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}" \
             "https://ieshyaiudxjrdwllbdai.supabase.co/rest/v1/sn_semanas?select=semana_inicio&limit=1")
