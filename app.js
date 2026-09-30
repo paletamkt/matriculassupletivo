@@ -190,7 +190,34 @@ function render(data) {
 
   checkSazonalidade();
 
-  /* ── Gráfico: Provas ── */
+  /* ── Gráfico âncora: Faturamento semanal ── */
+  if (charts.fat) charts.fat.destroy();
+  charts.fat = new Chart(document.getElementById('chartFat'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Faturamento',
+        data: fats,
+        borderColor: 'rgba(0,212,255,0.95)',
+        backgroundColor: 'rgba(0,212,255,0.10)',
+        borderWidth: 2.5,
+        pointRadius: 2.5,
+        pointBackgroundColor: 'rgba(0,212,255,1)',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: {
+      ...CD,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR') } }
+      },
+      scales: { x: CD.scales.x, y: { ...CD.scales.y, ticks: { ...CD.scales.y.ticks, callback: v => 'R$' + (v/1000) + 'k' } } }
+    }
+  });
+
+  /* ── Gráfico: Provas (apoio) ── */
   if (charts.provas) charts.provas.destroy();
   charts.provas = new Chart(document.getElementById('chartProvas'), {
     type: 'bar',
@@ -199,7 +226,7 @@ function render(data) {
       datasets: [{
         label: 'Provas vendidas',
         data: provas,
-        backgroundColor: provas.map(v => v >= mediaProvas ? 'rgba(0,212,255,0.72)' : 'rgba(45,110,245,0.55)'),
+        backgroundColor: provas.map(v => v >= mediaProvas ? 'rgba(45,110,245,0.85)' : 'rgba(45,110,245,0.4)'),
         borderRadius: 5,
       }]
     },
@@ -211,22 +238,7 @@ function render(data) {
     }
   });
 
-  /* ── Gráfico: Faturamento semanal ── */
-  if (charts.fat) charts.fat.destroy();
-  charts.fat = new Chart(document.getElementById('chartFat'), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{ label: 'Faturamento', data: fats, backgroundColor: 'rgba(45,110,245,0.65)', borderRadius: 5 }]
-    },
-    options: {
-      ...CD,
-      plugins: { legend: { display: false } },
-      scales: { x: CD.scales.x, y: { ...CD.scales.y, ticks: { ...CD.scales.y.ticks, callback: v => 'R$' + (v/1000) + 'k' } } }
-    }
-  });
-
-  /* ── Gráfico: Alunos ── */
+  /* ── Gráfico: Alunos (apoio) ── */
   if (charts.alunos) charts.alunos.destroy();
   charts.alunos = new Chart(document.getElementById('chartAlunos'), {
     type: 'line',
@@ -234,16 +246,16 @@ function render(data) {
       labels,
       datasets: [{
         label: 'Alunos', data: alunos,
-        borderColor: 'rgba(0,212,255,0.85)',
-        backgroundColor: 'rgba(0,212,255,0.07)',
-        borderWidth: 2, pointRadius: 3, pointBackgroundColor: 'rgba(0,212,255,1)',
+        borderColor: 'rgba(0,201,107,0.9)',
+        backgroundColor: 'rgba(0,201,107,0.08)',
+        borderWidth: 2, pointRadius: 3, pointBackgroundColor: 'rgba(0,201,107,1)',
         tension: 0.35, fill: true
       }]
     },
     options: { ...CD, plugins: { legend: { display: false } } }
   });
 
-  /* ── Gráfico: Mensal ── */
+  /* ── Gráfico: Mensal (faixa compacta de contexto) ── */
   const mesesMap = {};
   data.forEach(d => {
     const dt  = new Date(d.semana_inicio + 'T00:00:00');
@@ -256,7 +268,7 @@ function render(data) {
     type: 'bar',
     data: {
       labels:   Object.keys(mesesMap),
-      datasets: [{ label: 'Fat. Mensal', data: Object.values(mesesMap), backgroundColor: 'rgba(0,212,255,0.45)', borderRadius: 6 }]
+      datasets: [{ label: 'Fat. Mensal', data: Object.values(mesesMap), backgroundColor: 'rgba(245,166,35,0.55)', borderRadius: 4, maxBarThickness: 28 }]
     },
     options: {
       ...CD,

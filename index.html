@@ -137,30 +137,34 @@
   </div>
 
   <!-- ── GRÁFICOS ── -->
-  <div class="charts-row anim d9">
-    <div class="chart-card">
-      <div class="chart-title">Provas Vendidas por Semana</div>
-      <div class="chart-sub">Azul-claro = acima da média · 2026</div>
-      <canvas id="chartProvas" height="220"></canvas>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Acumulado por Mês</div>
-      <div class="chart-sub">Faturamento mensal 2026</div>
-      <canvas id="chartMensal" height="220"></canvas>
-    </div>
+  <div class="charts-section-title anim d9">
+    <h2>Tendências</h2>
+    <p>Evolução semanal e mensal · 2026</p>
+  </div>
+
+  <div class="chart-card chart-primary anim d9">
+    <div class="chart-title">Faturamento Semanal</div>
+    <div class="chart-sub">Receita por semana · 2026</div>
+    <canvas id="chartFat" height="80"></canvas>
   </div>
 
   <div class="charts-row-2 anim d9">
+    <div class="chart-card">
+      <div class="chart-title">Provas Vendidas por Semana</div>
+      <div class="chart-sub">Azul-forte = acima da média · 2026</div>
+      <canvas id="chartProvas" height="200"></canvas>
+    </div>
     <div class="chart-card">
       <div class="chart-title">Alunos por Semana</div>
       <div class="chart-sub">Evolução semanal de matrículas</div>
       <canvas id="chartAlunos" height="200"></canvas>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Faturamento por Semana</div>
-      <div class="chart-sub">Receita semanal 2026</div>
-      <canvas id="chartFat" height="200"></canvas>
-    </div>
+  </div>
+
+  <div class="chart-card chart-compact anim d9">
+    <div class="chart-title">Acumulado por Mês</div>
+    <div class="chart-sub">Faturamento mensal 2026</div>
+    <canvas id="chartMensal" height="60"></canvas>
   </div>
 
   <!-- ── TABELA COLAPSÍVEL ── -->

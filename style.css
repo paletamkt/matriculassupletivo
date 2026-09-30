@@ -337,11 +337,10 @@ header {
 /* ════════════════════════════
    CHARTS
 ════════════════════════════ */
-.charts-row {
-  display: grid; grid-template-columns: 2fr 1fr;
-  gap: 15px; margin-bottom: 15px;
-}
-@media (max-width: 900px) { .charts-row { grid-template-columns: 1fr; } }
+.charts-section-title { margin: 10px 0 12px; padding: 0 2px; }
+.charts-section-title h2 { font-size: 15px; font-weight: 700; }
+.charts-section-title p  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+body.light .charts-section-title h2 { color: #1a2744; }
 
 .charts-row-2 {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -357,6 +356,21 @@ header {
 }
 .chart-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
 .chart-sub   { font-size: 10px; color: var(--muted); margin-bottom: 14px; }
+
+/* Gráfico âncora — faturamento semanal, protagonista da seção */
+.chart-primary {
+  margin-bottom: 15px;
+  padding: 24px 26px;
+  border-color: rgba(0,212,255,0.22);
+}
+.chart-primary .chart-title { font-size: 13px; }
+
+/* Faixa mensal — resumo de contexto, discreto */
+.chart-compact {
+  margin-bottom: 18px;
+  padding: 16px 20px;
+}
+.chart-compact .chart-sub { margin-bottom: 8px; }
 
 /* ════════════════════════════
    TABELA COLAPSÍVEL
